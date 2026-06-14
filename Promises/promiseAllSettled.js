@@ -24,6 +24,31 @@ async function promiseAllSettled(promises) {
   });
 }
 
+// v2
+
+function promiseAllSettled(promises) {
+  return new Promise((resolve, rej) => {
+    if (promises.length == 0) resolve([]);
+
+    let results = Array.from({length: promises.length});
+    let counter = promises.length;
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise).then(res => {
+        results[index] = {status: "fulfilled", value: res};
+      }).catch(err => {
+        results[index] = {status: "rejected", reason: err};
+      }).finally(() => {
+        counter--;
+
+        if (counter == 0) {
+          resolve(results);
+        }
+      });
+    });
+  })
+}
+
 const results = await promiseAllSettled([
   Promise.resolve(1),
   Promise.reject("error"),
