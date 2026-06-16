@@ -17,3 +17,15 @@ const result = await promiseRace([
 // result = 'fast'
 
 console.log(result);
+
+//v2
+
+function promiseRace(promises) {
+  if (promises.length == 0) return new Promise();
+
+  return new Promise((resolve, reject) => {
+    promises.forEach((p, i) => {
+      Promise.resolve(p).then((data) => resolve(data)).catch((err) => reject(err));
+    })
+  })
+}
