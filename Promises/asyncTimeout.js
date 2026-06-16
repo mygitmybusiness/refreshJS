@@ -24,3 +24,16 @@ try {
 } catch (err) {
   console.error(err.message); // Output: Timeout of 500ms exceeded
 }
+
+// v2
+
+function asyncTimeout(fn, delay) {
+  return async function (...args) {
+    return Promise.race([
+      fn(...args),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout exceeded')), delay);
+      })
+    ])
+  }
+}
