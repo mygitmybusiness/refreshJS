@@ -25,3 +25,22 @@ const result = await promiseAny([
 
 console.log(result);
 // result = 'success!'
+
+//v2
+
+function promiseAny(promises) {
+    return new Promise((resolve, reject) => {
+      if (promises.length == 0) reject("All promises were rejected");
+      let count = promises.length;
+  
+      promises.forEach((promise, index) => {
+        Promise.resolve(promise).then((data) => {
+          resolve(data);
+        }).catch((err) => {
+          count--;
+  
+          if (count == 0) reject("All promises were rejected");
+        })
+      })
+    });
+  }
